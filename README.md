@@ -1,2 +1,0 @@
-# heaven
-Algorithm Programming Exercise
