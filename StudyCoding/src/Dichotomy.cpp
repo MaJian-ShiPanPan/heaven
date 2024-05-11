@@ -10,6 +10,7 @@
 #include <vector>
 #include <cstdlib>
 #include <algorithm>
+#include <set>
 
 // 题目1：在一个有序数组，找某个数是否存在
 bool DichotomyFindNumber(std::vector<int>& vec, int num)
@@ -105,15 +106,44 @@ int FindRightNearestIndex(std::vector<int>&vec, int num)
 	return iIndex;
 }
 
-// 题目4：找一个局部最小值
-int FindLocalMinimumValue(std::vector<int>&vec, int num)
+// 题目4：找一个局部最小值的位置
+int FindLocalMinimumValue(std::vector<int>&vec)
 {
-	int iMinimumValue = 0;
-	if()
+	if(1 >= vec.size())
 	{
-		
+		return -1;
 	}
-	return iMinimumValue;
+
+	if(vec[0] < vec[1])
+	{
+		return 0;
+	}
+
+	if(vec[vec.size() - 2] >  vec[vec.size() - 2])
+	{
+		return vec[vec.size() - 1];
+	}
+
+	int L = 1, R = vec.size() - 2;
+	while(L < R)
+	{
+		int mid = L + (R - L) >> 1;
+
+		if((vec[mid - 1] > vec[mid]) &&(vec[mid] < vec[mid + 1]))
+		{
+			return mid;
+		}
+
+		if(vec[mid - 1] < vec[mid])
+		{
+			R = mid - 1;
+		}
+		else
+		{
+			L = mid + 1;
+		}
+	}
+	return -1;
 }
 
 // 生成随机数组
@@ -270,8 +300,70 @@ void Test3()
 }
 
 // 题目4的对数器
+std::set<int> CheckFindLocalMinValue(std::vector<int>& vec)
+{
+	bool bFindLocalMinValue = false;
+	std::set<int> setLocalMiniPos;
+	if(vec.size() <= 1)
+	{
+		setLocalMiniPos.insert(-1);
+		return setLocalMiniPos;
+	}
+
+	if(vec[0] < vec[1])
+	{
+		setLocalMiniPos.insert(0);
+		bFindLocalMinValue = true;
+	}
+
+	if(vec[vec.size() - 2] > vec[vec.size() - 1])
+	{
+		setLocalMiniPos.insert(vec.size() - 1);
+		bFindLocalMinValue = true;
+	}
+
+	for(int i = 1; i < vec.size() - 2; ++i)
+	{
+		if((vec[i - 1] > vec[i]) && (vec[i] < vec[i + 1]))
+		{
+			setLocalMiniPos.insert(i);
+			bFindLocalMinValue = true;
+		}
+	}
+
+	if(!bFindLocalMinValue)
+	{
+		setLocalMiniPos.insert(-1);
+	}
+	return setLocalMiniPos;
+}
+
 void Test4()
 {
+	const int kiMaxLength = 10;
+	const int kiMaxValue = 100;
+	const int kiLoopCount = 10;
+	std::vector<int> vec;
+	for(int i = 0; i < kiLoopCount; ++i)
+	{
+		std::cout << "i: " << i << std::endl;
+		vec = generateRandomArray(kiMaxLength, kiMaxValue);
+		int iLocalMinPos = FindLocalMinimumValue(vec);
+		std::set<int> setLocalMinPos = CheckFindLocalMinValue(vec);
+		if(setLocalMinPos.end() != setLocalMinPos.find(iLocalMinPos))
+		{
+			std::cout << "Check Local Min Pos Success;" << std::endl;
+		}
+		else
+		{
+			std::cout << "Check Local Min Pos Failed;" << "vec: ";
+			for(auto &e: vec)
+			{
+				std::cout << e << " ";
+			}
+			std::cout << std::endl;
+		}
+	}
 }
 
 // 主函数
@@ -279,6 +371,7 @@ int main(int argc, char* argv[])
 {
     // Test1();
     // Test2();
-	Test3();
+	// Test3();
+	Test4();
     return EXIT_SUCCESS;
 }
