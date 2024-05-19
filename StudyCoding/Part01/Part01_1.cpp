@@ -111,6 +111,7 @@ long long Factorial(int n)
 
 int Combin(int iSum, int iTypeBNumber)
 {
+    // 这种求阶乘会导致溢出问题。所以具体如何求解组合数，可能需要找找数学方法。
     return Factorial(iSum) / (Factorial(iTypeBNumber) * Factorial(iSum - iTypeBNumber));
 }
 
@@ -170,6 +171,6 @@ void Test02_03()
 int main(int argc, char* argv[])
 {
     // Test01();
-    Test02_03();
+    // Test02_03();
     return EXIT_SUCCESS;
 }
