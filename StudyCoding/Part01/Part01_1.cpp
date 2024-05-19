@@ -103,14 +103,15 @@ int FindResult02_03ByDynamic(int n)
     return arr[n];
 }
 
-int Factorial(int n)
+long long Factorial(int n)
 {
-    if()
+    if(n < 1) return 1;
+    return n * Factorial(n - 1);
 }
 
 int Combin(int iSum, int iTypeBNumber)
 {
-    return 
+    return Factorial(iSum) / (Factorial(iTypeBNumber) * Factorial(iSum - iTypeBNumber));
 }
 
 int FindResult02_03byCombin(int n)
@@ -127,17 +128,48 @@ int FindResult02_03byCombin(int n)
         int iTypeBNumber = iTypeB - i;
         iSum = iTypeANumber + iTypeBNumber;
         iResult += Combin(iSum, iTypeBNumber);
+        std::cout << "iSum: " << iSum
+            << ", iTypeBNumber: " << iTypeBNumber
+            << ", combom result: " << Combin(iSum, iTypeBNumber)
+            << ", result: " << iResult
+            << std::endl;
     }
     return iResult;
 }
 
 void Test02_03()
 {
+    const int kiLoopCount = 100;
+    const int kiMaxValue = 39;
 
+    for(int i = 0; i < kiLoopCount; ++i)
+    {
+        int iRandomValue = GetRandomNumber(kiMaxValue);
+
+        int iResultFindResult02_03ByDynamic = FindResult02_03ByDynamic(iRandomValue);
+        int iResultFindResult02_03byCombin = FindResult02_03byCombin(iRandomValue);
+        if(iResultFindResult02_03byCombin == iResultFindResult02_03ByDynamic)
+        {
+            std::cout << "Success, iRandomValue: " << iRandomValue
+                << ", iResultFindResult02_03ByDynamic: " << iResultFindResult02_03ByDynamic
+                << ", iResultFindResult02_03byCombin: " << iResultFindResult02_03byCombin
+                << std::endl;
+        }
+        else
+        {
+            std::cout << "Fail, iRandomValue: " << iRandomValue
+                << ", iResultFindResult02_03ByDynamic: " << iResultFindResult02_03ByDynamic
+                << ", iResultFindResult02_03byCombin: " << iResultFindResult02_03byCombin
+                << std::endl;
+                break;
+        }
+    }
+    std::cout << "Find over" << std::endl;
 }
 
 int main(int argc, char* argv[])
 {
-    Test01();
+    // Test01();
+    Test02_03();
     return EXIT_SUCCESS;
 }
